@@ -6,4 +6,5 @@ public class ComponentsForPathGenerationForOpponents : MonoBehaviour
     public GameObject PreFinish;
     public GameObject PreDirectionPoint;
     public Sprite Trail;
+    public Sprite ZoneForTower;
 }

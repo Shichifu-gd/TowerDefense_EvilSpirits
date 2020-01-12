@@ -3,7 +3,18 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Cell
+  - PathGeneration
+  - DirectionPoints
+  - Enemy
+  - EnemySlot
+  - CellForTower
+  - CellForTowerFull
+  - Tower
+  - TowerSlot
+  - EnemyManager
+  - Ammunition
   layers:
   - Default
   - TransparentFX

@@ -6,8 +6,12 @@ public class PathGenerationForOpponents : MonoBehaviour
     private ComponentsForPathGenerationForOpponents components;
     private DeterminantVectorCurrentPosition directions;
     public EnemySpawnManager enemySpawnManager;
+    public CellManager cellManager;
 
     public GameObject VectorDeterminant;
+    private GameObject DirectionOfVerificationNorth;
+    private GameObject DirectionOfVerificationSouth;
+    private GameObject DirectionOfVerificationEast;
 
     private bool WorkflowSwitching = true;
     private bool CompleteShutdown;
@@ -15,6 +19,7 @@ public class PathGenerationForOpponents : MonoBehaviour
 
     private int YPosition = 0;
     private int NumberOfCellsTraversedEast;
+    public int AdditionalNumber = 10;
 
     private string CurrentForbiddenDirection;
     private string OldForbiddenDirection = "none";
@@ -35,8 +40,10 @@ public class PathGenerationForOpponents : MonoBehaviour
         WorkflowSwitching = false;
         MovingVectorDeterminant();
         VectorDeterminant.SetActive(true);
-        yield return new WaitForSeconds(0.001f);
-        ChangeCell();
+        yield return new WaitForSeconds(0.01f);
+        PavesTrail();
+        RefreshCells();
+        AddTerritoryForTowers();
         VectorDeterminant.SetActive(false);
         WorkflowSwitching = true;
     }
@@ -100,16 +107,10 @@ public class PathGenerationForOpponents : MonoBehaviour
     {
         if (OldForbiddenDirection != "none")
         {
-            if (OldForbiddenDirection != CurrentForbiddenDirection) SpawnDirectionPoints();
+            if (OldForbiddenDirection != CurrentForbiddenDirection) SpawnAdditionalComponents(components.PreDirectionPoint, "DirectionPoints");
             OldForbiddenDirection = CurrentForbiddenDirection;
         }
         else OldForbiddenDirection = CurrentForbiddenDirection;
-    }
-
-    private void SpawnDirectionPoints()
-    {
-        GameObject point_DP = Instantiate(components.PreDirectionPoint, VectorDeterminant.transform.position, Quaternion.identity);
-        point_DP.transform.parent = GameObject.FindGameObjectWithTag("DirectionPoints").transform;
     }
 
     private void HeightCount(int numSide)
@@ -118,26 +119,55 @@ public class PathGenerationForOpponents : MonoBehaviour
         if (numSide == 1) YPosition--;
     }
 
-    private void ChangeCell()
+    private void PavesTrail()
     {
-        GameObject cell = VectorDeterminant.GetComponent<DeterminantVectorCurrentPosition>().CurrentCell;
-        if (cell.GetComponent<CellInformation>().EndOfRoad == false)
-        {
-            cell.GetComponent<SpriteRenderer>().sprite = components.Trail;
-            cell.GetComponent<CellInformation>().VarietyCell = "trail";
-            cell = null;
-        }
+        if (directions.CurrentCell.GetComponent<CellInformation>().EndOfRoad == false) ChangeCell(directions.CurrentCell, components.Trail, "trail");
         else
         {
             CompleteShutdown = true;
-            SpawnFinishPoint();
+            SpawnAdditionalComponents(components.PreFinish, "DirectionPoints");
+            ChangeCell(directions.CurrentCell, null, "finish");
             VectorDeterminant.SetActive(false);
+            cellManager.ChangeCellTag("tower", "CellForTower");
+            enemySpawnManager.SwitchStart = true;
         }
     }
 
-    private void SpawnFinishPoint()
+    private void SpawnAdditionalComponents(GameObject prefab, string assignedView)
     {
-        GameObject point_F = Instantiate(components.PreFinish, VectorDeterminant.transform.position, Quaternion.identity);
-        point_F.transform.parent = GameObject.FindGameObjectWithTag("DirectionPoints").transform;
+        GameObject spawnObject = Instantiate(prefab, VectorDeterminant.transform.position, Quaternion.identity);
+        spawnObject.transform.parent = GameObject.FindGameObjectWithTag(assignedView).transform;
+    }
+
+    private void RefreshCells()
+    {
+        DirectionOfVerificationNorth = directions.North.GetComponent<GettingCellReference>().CellPosition;
+        DirectionOfVerificationSouth = directions.South.GetComponent<GettingCellReference>().CellPosition;
+        DirectionOfVerificationEast = directions.East.GetComponent<GettingCellReference>().CellPosition;
+    }
+
+    private void AddTerritoryForTowers() //check!!
+    {
+        if (DirectionOfVerificationNorth.GetComponent<CellInformation>().VarietyCell == "standart" && DetermineWhetherPossibleChangeTypeCell()) ChangeCell(DirectionOfVerificationNorth, components.ZoneForTower, "tower");
+        else if (DirectionOfVerificationNorth.GetComponent<CellInformation>().VarietyCell == "standart") ChangeCell(DirectionOfVerificationNorth, null, "none");
+        if (DirectionOfVerificationSouth.GetComponent<CellInformation>().VarietyCell == "standart" && DetermineWhetherPossibleChangeTypeCell()) ChangeCell(DirectionOfVerificationSouth, components.ZoneForTower, "tower");
+        else if (DirectionOfVerificationSouth.GetComponent<CellInformation>().VarietyCell == "standart") ChangeCell(DirectionOfVerificationSouth, null, "none");
+        if (DirectionOfVerificationEast.GetComponent<CellInformation>().VarietyCell == "standart" && DetermineWhetherPossibleChangeTypeCell()) ChangeCell(DirectionOfVerificationEast, components.ZoneForTower, "tower");
+        else if (DirectionOfVerificationEast.GetComponent<CellInformation>().VarietyCell == "standart") ChangeCell(DirectionOfVerificationEast, null, "none");
+    }
+
+    private bool DetermineWhetherPossibleChangeTypeCell()
+    {
+        int randomNumber;
+        randomNumber = Random.Range(0, AdditionalNumber);
+        if (randomNumber != 0 && randomNumber != 4 && randomNumber != 6) return true;
+        else return false;
+    }
+
+    private void ChangeCell(GameObject cellReferenceReceived, Sprite newSprite, string assignedView)
+    {
+        GameObject cell = cellReferenceReceived;
+        if (newSprite) cell.GetComponent<SpriteRenderer>().sprite = newSprite;
+        if (cell.GetComponent<CellInformation>().VarietyCell != "trail") cell.GetComponent<CellInformation>().VarietyCell = assignedView;
     }
 }
