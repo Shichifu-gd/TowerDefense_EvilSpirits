@@ -1,18 +1,26 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    private Player player;
     private EnemySpawnManager enemySpawnManager;
+    private Collider2D EnemyCollider2D;
+    [SerializeField] private Image ImageCurrentHealth;
+    [SerializeField] private SpriteRenderer ThisSpriteRenderer;
 
-    private Collider2D enemyCollider2D;
+    private int AttackEnemy = 1;
+    private int DirectionPointIndex = 0;
+    private int RewardGold;
 
-    public int Health;
-
-    public int HealthEnemy { get; set; } = 20;
-    public int AttackEnemy { get; set; }
-    private int Speed = 2;
-    private int Index = 0;
+    private float SpeedMove;
+    private float BaseSpeedMove;
+    private float DebuffTime;
+    private float PowerDdebuff;
+    private float MaxHealthEnemy;
+    private float HealthEnemy;
 
     public bool IsDead { get; set; } = false;
 
@@ -20,14 +28,21 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         DirectionPoints = GameObject.FindGameObjectWithTag("PathGeneration").GetComponent<ListOfDirectionPoints>().ListDirectionPoints;
         enemySpawnManager = GameObject.FindGameObjectWithTag("EnemyManager").GetComponent<EnemySpawnManager>();
-        enemyCollider2D = GetComponent<Collider2D>();
+        EnemyCollider2D = GetComponent<Collider2D>();
     }
 
-    private void Start()
+    public void AssignValuesForEnemy(ScriptableObjectsEnemy scrObjEnemy)
     {
-        enemySpawnManager.RegisterEnemy(this);
+        enemySpawnManager.RegisterEnemy(gameObject);
+        ThisSpriteRenderer.sprite = scrObjEnemy.SpriteEnemy;
+        HealthEnemy = scrObjEnemy.HealthEnemy;
+        MaxHealthEnemy = HealthEnemy;
+        SpeedMove = scrObjEnemy.SpeedMoveEnemy;
+        BaseSpeedMove = SpeedMove;
+        RewardGold = 15; // add
     }
 
     private void FixedUpdate()
@@ -37,45 +52,69 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Finish") enemySpawnManager.UnRegisterEnemy(this);
+        if (collision.tag == "Finish") EnemyHasReachedFinish();
         if (collision.tag == "Ammunition")
         {
-            Ammunitions ammunition = collision.gameObject.GetComponent<Ammunitions>();
-            if (ammunition)
+            Projectile projectile = collision.gameObject.GetComponent<Projectile>();
+            ProjectileType projectileType = projectile.GetAmmunitionsTypeEnum;
+            if (projectile)
             {
-                TakingDamage(ammunition.AttackDamage);
+                if (projectileType == ProjectileType.FireFist)
+                {
+                    PowerDdebuff = projectile.EffectImpactProjectile;
+                    DebuffTime = projectile.EffectTime;
+                    TakingDebuff();
+                }
+                TakingDamage(projectile.GetAttackProjectile);
                 Destroy(collision.gameObject);
             }
         }
     }
 
+    private void EnemyHasReachedFinish()
+    {
+        player.GetLife(1, "minus");
+        enemySpawnManager.UnRegisterEnemy(gameObject);
+    }
+
     private void GoToPoint()
     {
-        Vector2 vector = DirectionPoints[Index].transform.position - transform.position;
-        transform.Translate(vector.normalized * Time.deltaTime * Speed);
-        if (Vector2.Distance(transform.position, DirectionPoints[Index].transform.position) < 0.01f)
+        Vector2 vector = DirectionPoints[DirectionPointIndex].transform.position - transform.position;
+        transform.Translate(vector.normalized * Time.deltaTime * SpeedMove);
+        if (Vector2.Distance(transform.position, DirectionPoints[DirectionPointIndex].transform.position) < .02f)
         {
-            if (Index < DirectionPoints.Count - 1) Index++;
+            if (DirectionPointIndex < DirectionPoints.Count - 1) DirectionPointIndex++;
             else Destroy(gameObject);
         }
     }
 
     public void TakingDamage(int damage)
     {
-        Health = HealthEnemy;
         if ((HealthEnemy - damage) > 0) HealthEnemy -= damage;
-        else DieEnemy();
+        else EnemyIsDead();
+        ImageCurrentHealth.fillAmount = HealthEnemy / MaxHealthEnemy;
     }
 
-    private void DieEnemy()
+    public void TakingDebuff()
     {
+        SpeedMove = BaseSpeedMove;
+        StopCoroutine("slow");
+        StartCoroutine(DebuffSpeedReduction());
+    }
+
+    IEnumerator DebuffSpeedReduction()
+    {
+        if (SpeedMove > 0.5f) SpeedMove -= PowerDdebuff;
+        else SpeedMove = 0.5f;
+        yield return new WaitForSeconds(DebuffTime);
+        SpeedMove = BaseSpeedMove;
+    }
+
+    private void EnemyIsDead()
+    {
+        player.GetGold(RewardGold, "plus");
         IsDead = true;
-        enemyCollider2D.enabled = false;
-        enemySpawnManager.UnRegisterEnemy(this);
-    }
-
-    public void TakingDebuffs()
-    {
-
+        EnemyCollider2D.enabled = false;
+        enemySpawnManager.UnRegisterEnemy(gameObject);
     }
 }

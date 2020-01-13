@@ -2,7 +2,7 @@
 
 public class DirectionPoints : MonoBehaviour
 {
-    ListOfDirectionPoints listOfDirectionPoints;
+    private ListOfDirectionPoints listOfDirectionPoints;
 
     private void Awake()
     {

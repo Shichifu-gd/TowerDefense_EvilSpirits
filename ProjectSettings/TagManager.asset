@@ -15,6 +15,7 @@ TagManager:
   - TowerSlot
   - EnemyManager
   - Ammunition
+  - ProjectileSlot
   layers:
   - Default
   - TransparentFX

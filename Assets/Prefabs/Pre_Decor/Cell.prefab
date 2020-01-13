@@ -142,3 +142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9acb12635258f524ebb688e5a8b1d49b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EndOfRoad: 0
+  MainColor: {r: 1, g: 1, b: 1, a: 1}
+  AdditionalColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}

@@ -1,18 +1,32 @@
-﻿using UnityEngine;
+﻿using UnityEngine.UI;
+using UnityEngine;
 
 public class TowerStore : MonoBehaviour
 {
-    public GameObject currentTower;
-    public Sprite spriteTower;
+    public ScriptableObjectsTower ScrObjTower;
+    public Image IcoTower;
+    public GameObject PreTower;
+    [HideInInspector]
+    public Sprite SprTower;
+    public int towerPrice { get; set; }
 
-    [SerializeField]
-    private int towerPrice;
+    public Text DamageText;
+    public Text PriceText;
+
+    private void Start()
+    {
+        SprTower = ScrObjTower.SpriteTower;
+        IcoTower.sprite = ScrObjTower.SpriteTower;
+        towerPrice = ScrObjTower.PriceTower;
+        DamageText.text = ScrObjTower.ScrObjProjectile.AttackDamageProjectile.ToString();
+        PriceText.text = towerPrice.ToString();
+    }
 
     public GameObject CurrentTower
     {
         get
         {
-            return currentTower;
+            return PreTower;
         }
     }
 
@@ -20,15 +34,7 @@ public class TowerStore : MonoBehaviour
     {
         get
         {
-            return spriteTower;
-        }
-    }
-
-    public int TowerPrice
-    {
-        get
-        {
-            return towerPrice;
+            return SprTower;
         }
     }
 }

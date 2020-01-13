@@ -6,9 +6,10 @@ public class EnemySpawnManager : MonoBehaviour
 {
     public GameObject SpawnPointEnemy;
 
-    public GameObject[] EnemyLevelOne;
-    public GameObject[] EnemyLevelTwo;
-    public GameObject[] EnemyLevelThree;
+    public GameObject PreEnemy;
+    public ScriptableObjectsEnemy[] EnemyLevelOne;
+    public ScriptableObjectsEnemy[] EnemyLevelTwo;
+    public ScriptableObjectsEnemy[] EnemyLevelThree;
 
     private int Wave;
     private int NumberEnemiesFirstLevel;
@@ -17,38 +18,35 @@ public class EnemySpawnManager : MonoBehaviour
 
     public bool SwitchStart { get; set; }
 
-    public List<Enemy> EnemyList;
+    public List<GameObject> EnemyList;
 
     private void Update()
     {
         if (SwitchStart) StartCoroutine(EnemySpawn());
     }
 
-    private void EnemyChoice()
-    {
-
-    }
-
     private IEnumerator EnemySpawn()
     {
         SwitchStart = false;
+        int randomInndex = Random.Range(0, EnemyLevelOne.Length);
         yield return new WaitForSeconds(1f);
-        Spawn(EnemyLevelOne[0]);
+        Spawn(EnemyLevelOne[randomInndex]);
         SwitchStart = true;
     }
 
-    private void Spawn(GameObject enemy)
+    private void Spawn(ScriptableObjectsEnemy enemy)
     {
-        GameObject enemyObject = Instantiate(enemy, SpawnPointEnemy.transform.position, Quaternion.identity);
+        GameObject enemyObject = Instantiate(PreEnemy, SpawnPointEnemy.transform.position, Quaternion.identity);
         enemyObject.transform.parent = GameObject.FindGameObjectWithTag("EnemySlot").transform;
+        enemyObject.GetComponent<Enemy>().AssignValuesForEnemy(enemy);
     }
 
-    public void RegisterEnemy(Enemy enemy)
+    public void RegisterEnemy(GameObject enemy)
     {
         EnemyList.Add(enemy);
     }
 
-    public void UnRegisterEnemy(Enemy enemy)
+    public void UnRegisterEnemy(GameObject enemy)
     {
         EnemyList.Remove(enemy);
         Destroy(enemy.gameObject);
@@ -56,7 +54,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     public void DestroyAllEnemy()
     {
-        foreach (Enemy enemy in EnemyList)
+        foreach (GameObject enemy in EnemyList)
         {
             Destroy(enemy.gameObject);
         }

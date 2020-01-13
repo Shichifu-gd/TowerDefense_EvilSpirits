@@ -1,106 +1,90 @@
 ﻿using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
     private EnemySpawnManager enemySpawnManager;
-    private Enemy target;
+    private Enemy Target;
+    private SpriteRenderer ThisSpriteRenderer;
+    private ScriptableObjectsProjectile ScrObjProjectile;
     [SerializeField]
-    private Ammunitions ammunitionTower;
+    private GameObject PreProjectile;
+    public GameObject AdditionalInterface;
 
-    [SerializeField]
-    private float attackDelay;
-    [SerializeField]
-    private float attackRadius;
-    private float attackCounter;
+    private float BasicDelayAttack;
+    private float CurrentDelayAttack;
+    private float AttackRange;
 
-    private bool isAttacking = false;
-    private void Awake()
+    public void Awake()
     {
         enemySpawnManager = GameObject.FindGameObjectWithTag("EnemyManager").GetComponent<EnemySpawnManager>();
+        ThisSpriteRenderer = GetComponentInParent<SpriteRenderer>();
+    }
+
+    public void AssignTowerValues(ScriptableObjectsTower scrObjTower)
+    {
+        ThisSpriteRenderer.sprite = scrObjTower.SpriteTower;
+        AttackRange = scrObjTower.AttackRangeTower;
+        BasicDelayAttack = scrObjTower.BasicDelayAttackTower;
+        CurrentDelayAttack = BasicDelayAttack;
+        ScrObjProjectile = scrObjTower.ScrObjProjectile;
     }
 
     private void Update()
     {
-        attackCounter -= Time.deltaTime;
-        if (target == null || target.IsDead)
+        if (CanAttack()) GetTarget();
+        if (CurrentDelayAttack > 0) CurrentDelayAttack -= Time.deltaTime;
+    }
+
+    private bool CanAttack()
+    {
+        if (CurrentDelayAttack <= 0) return true;
+        return false;
+    }
+
+    private void GetTarget()
+    {
+        Transform target = null;
+        float enemyDistance = Mathf.Infinity;
+        foreach (GameObject enemy in enemySpawnManager.EnemyList)
         {
-            target = null;
-            Enemy nearestEnemy = GetNearestEnemy();
-            if (nearestEnemy != null && Vector2.Distance(transform.localPosition, nearestEnemy.transform.localPosition) <= attackRadius) target = nearestEnemy;
-        }
-        else
-        {
-            if (attackCounter <= 0)
+            float currentDistance = Vector2.Distance(transform.position, enemy.transform.position);
+            if (currentDistance < enemyDistance && currentDistance <= AttackRange)
             {
-                isAttacking = true;
-                attackCounter = attackDelay;
-                if (Vector2.Distance(transform.localPosition, target.transform.localPosition) > attackRadius) target = null;
-            }
-            else isAttacking = false;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if (isAttacking == true) AttackTower();
-    }
-
-    private void AttackTower()
-    {
-        isAttacking = false;
-        Ammunitions newAmmunitions = Instantiate(ammunitionTower) as Ammunitions;
-        newAmmunitions.transform.localPosition = transform.localPosition;
-        if (target == null || target.IsDead) Destroy(newAmmunitions);
-        else StartCoroutine(MoveAmmunition(newAmmunitions));
-    }
-
-    private IEnumerator MoveAmmunition(Ammunitions shell)
-    {
-        while (GetTargetDistance(target) > 0.20f && shell != null && target != null && !target.IsDead)
-        {
-            var direction = target.transform.localPosition - transform.localPosition;
-            var angleDirection = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            shell.transform.rotation = Quaternion.AngleAxis(angleDirection, Vector3.forward);
-            shell.transform.localPosition = Vector2.MoveTowards(shell.transform.localPosition, target.transform.localPosition, 5f * Time.deltaTime);
-            yield return null;
-        }
-        if (shell != null || target == null || target.IsDead) Destroy(shell);
-    }
-
-    private float GetTargetDistance(Enemy thisEnemy)
-    {
-        if (thisEnemy == null)
-        {
-            thisEnemy = GetNearestEnemy();
-            if (thisEnemy == null) return 0f;
-        }
-        return Mathf.Abs(Vector2.Distance(transform.localPosition, thisEnemy.transform.localPosition));
-    }
-
-    private Enemy GetNearestEnemy()
-    {
-        Enemy nearestEnemy = null;
-        float smallDistance = float.PositiveInfinity;
-        foreach (Enemy enemy in GetEnemiesRange())
-        {
-            if (Vector2.Distance(transform.localPosition, enemy.transform.localPosition) < smallDistance)
-            {
-                smallDistance = Vector2.Distance(transform.localPosition, enemy.transform.localPosition);
-                nearestEnemy = enemy;
+                target = enemy.transform;
+                enemyDistance = currentDistance;
             }
         }
-        return nearestEnemy;
+        if (target != null) AttackTower(target);
     }
 
-    private List<Enemy> GetEnemiesRange()
+    /* (delete !!)
+    private List<GameObject> GetEnemiesRange()
     {
-        List<Enemy> enemyRange = new List<Enemy>();
-        foreach (Enemy enemy in enemySpawnManager.EnemyList)
+        List<GameObject> enemyRange = new List<GameObject>();
+        foreach (GameObject enemy in enemySpawnManager.EnemyList)
         {
-            if (Vector2.Distance(transform.localPosition, enemy.transform.localPosition) <= attackRadius) enemyRange.Add(enemy);
+            if (Vector2.Distance(transform.localPosition, enemy.transform.localPosition) <= AttackRange) enemyRange.Add(enemy);
         }
         return enemyRange;
+    }
+    */
+
+    private void AttackTower(Transform thisEnemy)
+    {
+        CurrentDelayAttack = BasicDelayAttack;
+        GameObject newProjectile = Instantiate(PreProjectile, gameObject.transform.position, Quaternion.identity);
+        newProjectile.transform.parent = GameObject.FindGameObjectWithTag("ProjectileSlot").transform;
+        newProjectile.GetComponent<Projectile>().AssignValues(thisEnemy, ScrObjProjectile);
+    }
+
+    private void OnMouseEnter()
+    {
+        //  AdditionalInterface.SetActive(true); 
+    }
+
+    private void OnMouseExit()
+    {
+        //  AdditionalInterface.SetActive(false);
     }
 }

@@ -19,7 +19,7 @@ public class PathGenerationForOpponents : MonoBehaviour
 
     private int YPosition = 0;
     private int NumberOfCellsTraversedEast;
-    public int AdditionalNumber = 10;
+    public int NumberForMaximumRandomNumber = 10;
 
     private string CurrentForbiddenDirection;
     private string OldForbiddenDirection = "none";
@@ -41,7 +41,7 @@ public class PathGenerationForOpponents : MonoBehaviour
         MovingVectorDeterminant();
         VectorDeterminant.SetActive(true);
         yield return new WaitForSeconds(0.01f);
-        PavesTrail();
+        PavingTrail();
         RefreshCells();
         AddTerritoryForTowers();
         VectorDeterminant.SetActive(false);
@@ -119,7 +119,7 @@ public class PathGenerationForOpponents : MonoBehaviour
         if (numSide == 1) YPosition--;
     }
 
-    private void PavesTrail()
+    private void PavingTrail()
     {
         if (directions.CurrentCell.GetComponent<CellInformation>().EndOfRoad == false) ChangeCell(directions.CurrentCell, components.Trail, "trail");
         else
@@ -159,7 +159,7 @@ public class PathGenerationForOpponents : MonoBehaviour
     private bool DetermineWhetherPossibleChangeTypeCell()
     {
         int randomNumber;
-        randomNumber = Random.Range(0, AdditionalNumber);
+        randomNumber = Random.Range(0, NumberForMaximumRandomNumber);
         if (randomNumber != 0 && randomNumber != 4 && randomNumber != 6) return true;
         else return false;
     }

@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class CellManager : MonoBehaviour
 {
-   public List<GameObject> ListCell;
-   
+    public List<GameObject> ListCell;
+
     public void ChangeCellTag(string varietyCell, string newTag)
     {
         for (int index = 0; index < ListCell.Count; index++)
