@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce6ec355dd04bee488b62646310e4f22, type: 3}
-  m_Name: Eater
+  m_Name: OrcStrongFinger
   m_EditorClassIdentifier: 
-  SpriteEnemy: {fileID: 21300000, guid: 7120c11b81e9f894ab65beaef6a1f5fb, type: 3}
-  SpeedMoveEnemy: 0.7
-  HealthEnemy: 25
-  MinReward: 2
-  MaxReward: 10
-  MinScore: 1
-  MaxScore: 3
+  SpriteEnemy: {fileID: 21300000, guid: 1667cc93f5e511a42b4b87404afeedd2, type: 3}
+  SpeedMoveEnemy: 0.6
+  HealthEnemy: 73
+  MinReward: 15
+  MaxReward: 30
+  MinScore: 3
+  MaxScore: 5

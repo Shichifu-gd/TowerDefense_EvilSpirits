@@ -12,15 +12,16 @@ public class Enemy : MonoBehaviour
     [SerializeField] private SpriteRenderer ThisSpriteRenderer;
 
     private int AttackEnemy = 1;
+    private int MaxHealthEnemy;
+    public int HealthEnemy;
     private int DirectionPointIndex = 0;
-    private int RewardGold;
+    public int RewardGold;
+    public int RewardScore;
 
     private float SpeedMove;
     private float BaseSpeedMove;
     private float DebuffTime;
-    private float PowerDdebuff;
-    private float MaxHealthEnemy;
-    private float HealthEnemy;
+    private float PowerDebuff;
 
     public bool IsDead { get; set; } = false;
 
@@ -42,7 +43,8 @@ public class Enemy : MonoBehaviour
         MaxHealthEnemy = HealthEnemy;
         SpeedMove = scrObjEnemy.SpeedMoveEnemy;
         BaseSpeedMove = SpeedMove;
-        RewardGold = 15; // add
+        RewardGold = Random.Range(scrObjEnemy.MinReward, scrObjEnemy.MaxReward);
+        RewardScore = Random.Range(scrObjEnemy.MinScore, scrObjEnemy.MaxScore);
     }
 
     private void FixedUpdate()
@@ -61,7 +63,7 @@ public class Enemy : MonoBehaviour
             {
                 if (projectileType == ProjectileType.FireFist)
                 {
-                    PowerDdebuff = projectile.EffectImpactProjectile;
+                    PowerDebuff = projectile.EffectImpactProjectile;
                     DebuffTime = projectile.EffectTime;
                     TakingDebuff();
                 }
@@ -74,7 +76,7 @@ public class Enemy : MonoBehaviour
     private void EnemyHasReachedFinish()
     {
         player.GetLife(1, "minus");
-        enemySpawnManager.UnRegisterEnemy(gameObject);
+        enemySpawnManager.UnRegisterEnemy(gameObject, 0);
     }
 
     private void GoToPoint()
@@ -90,9 +92,17 @@ public class Enemy : MonoBehaviour
 
     public void TakingDamage(int damage)
     {
-        if ((HealthEnemy - damage) > 0) HealthEnemy -= damage;
+        if ((HealthEnemy - damage) > 0)
+        {
+            int dam;
+            if (damage < 10) dam = 4;
+            else dam = 6;
+            int minDamage = damage - Random.Range(1, dam);
+            HealthEnemy -= Random.Range(minDamage, damage);
+        }
         else EnemyIsDead();
-        ImageCurrentHealth.fillAmount = HealthEnemy / MaxHealthEnemy;
+        float num = HealthEnemy;
+        ImageCurrentHealth.fillAmount = num / MaxHealthEnemy;
     }
 
     public void TakingDebuff()
@@ -104,7 +114,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator DebuffSpeedReduction()
     {
-        if (SpeedMove > 0.5f) SpeedMove -= PowerDdebuff;
+        if (SpeedMove > 0.5f) SpeedMove -= PowerDebuff;
         else SpeedMove = 0.5f;
         yield return new WaitForSeconds(DebuffTime);
         SpeedMove = BaseSpeedMove;
@@ -115,6 +125,6 @@ public class Enemy : MonoBehaviour
         player.GetGold(RewardGold, "plus");
         IsDead = true;
         EnemyCollider2D.enabled = false;
-        enemySpawnManager.UnRegisterEnemy(gameObject);
+        enemySpawnManager.UnRegisterEnemy(gameObject, RewardScore);
     }
 }

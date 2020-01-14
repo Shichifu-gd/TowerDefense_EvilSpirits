@@ -20,16 +20,16 @@ public class TowerManager : MonoBehaviour
             RaycastHit2D raycastHit2D = Physics2D.Raycast(mousePoint, Vector2.zero);
             if (towerStore && raycastHit2D.collider.tag == "CellForTower")
             {
-                if (player.Gold > towerStore.towerPrice)
+                if (player.Gold >= towerStore.towerPrice)
                 {
                     raycastHit2D.collider.tag = "CellForTowerFull";
                     PlaceTower(raycastHit2D);
                 }
-                else DidableDrag();
+                else DisableDrag();
             }
         }
         if (SpriteSelectedTtower.enabled) FollowMouse();
-        if (Input.GetKeyDown(KeyCode.Escape)) DidableDrag();
+        if (Input.GetKeyDown(KeyCode.Escape)) DisableDrag();
     }
 
     public void PlaceTower(RaycastHit2D raycastHit2D)
@@ -41,14 +41,14 @@ public class TowerManager : MonoBehaviour
             newTower.transform.position = raycastHit2D.transform.position;
             newTower.transform.parent = GameObject.FindGameObjectWithTag("TowerSlot").transform;
             player.GetGold(towerStore.towerPrice, "minus");
-            DidableDrag();
+            DisableDrag();
         }
     }
 
     public void SelectedTower(TowerStore towerSelected)
     {
         towerStore = towerSelected;
-        EnebleDrag(towerStore.SpriteTower);
+        EnableDrag(towerStore.SpriteTower);
     }
 
     public void FollowMouse()
@@ -57,13 +57,13 @@ public class TowerManager : MonoBehaviour
         transform.position = new Vector2(transform.position.x, transform.position.y);
     }
 
-    public void EnebleDrag(Sprite sprite)
+    public void EnableDrag(Sprite sprite)
     {
         SpriteSelectedTtower.enabled = true;
         SpriteSelectedTtower.sprite = sprite;
     }
 
-    public void DidableDrag()
+    public void DisableDrag()
     {
         SpriteSelectedTtower.enabled = false;
         towerStore = null;

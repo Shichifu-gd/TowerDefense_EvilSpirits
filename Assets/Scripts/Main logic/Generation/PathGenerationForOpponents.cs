@@ -7,6 +7,7 @@ public class PathGenerationForOpponents : MonoBehaviour
     private DeterminantVectorCurrentPosition directions;
     public EnemySpawnManager enemySpawnManager;
     public CellManager cellManager;
+    public UIManager uIManager;
 
     public GameObject VectorDeterminant;
     private GameObject DirectionOfVerificationNorth;
@@ -122,15 +123,18 @@ public class PathGenerationForOpponents : MonoBehaviour
     private void PavingTrail()
     {
         if (directions.CurrentCell.GetComponent<CellInformation>().EndOfRoad == false) ChangeCell(directions.CurrentCell, components.Trail, "trail");
-        else
-        {
-            CompleteShutdown = true;
-            SpawnAdditionalComponents(components.PreFinish, "DirectionPoints");
-            ChangeCell(directions.CurrentCell, null, "finish");
-            VectorDeterminant.SetActive(false);
-            cellManager.ChangeCellTag("tower", "CellForTower");
-            enemySpawnManager.SwitchStart = true;
-        }
+        else NextProcess();
+    }
+
+    private void NextProcess()
+    {
+        CompleteShutdown = true;
+        SpawnAdditionalComponents(components.PreFinish, "DirectionPoints");
+        ChangeCell(directions.CurrentCell, null, "finish");
+        VectorDeterminant.SetActive(false);
+        cellManager.ChangeCellTag("tower", "CellForTower");
+        enemySpawnManager.StartEnemySpawn();
+        uIManager.OnPanel();
     }
 
     private void SpawnAdditionalComponents(GameObject prefab, string assignedView)

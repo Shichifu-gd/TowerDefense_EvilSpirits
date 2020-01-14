@@ -15,3 +15,7 @@ MonoBehaviour:
   SpriteEnemy: {fileID: 21300000, guid: 8abbbf3e9cf757444971b0d4a2eed812, type: 3}
   SpeedMoveEnemy: 1.2
   HealthEnemy: 15
+  MinReward: 2
+  MaxReward: 10
+  MinScore: 1
+  MaxScore: 3

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd8345f2cd75e5488ce2078988c66f1, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
-  ProjectileTypeEnum: 1
   SpriteProjectile: {fileID: 21300000, guid: ff1a63e25a4bcbd49ad33964250fb81f, type: 3}
+  ProjectileTypeEnum: 1
   SpeedMoveProjectile: 4
   EffectImpactProjectile: 0
   EffectTime: 0
-  AttackDamageProjectile: 4
+  AttackDamageProjectile: 6

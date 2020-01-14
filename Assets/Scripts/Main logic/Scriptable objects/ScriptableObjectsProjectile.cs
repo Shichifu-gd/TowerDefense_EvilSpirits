@@ -5,8 +5,8 @@
 [CreateAssetMenu(menuName = "ScriptableObjects/Projectile")]
 public class ScriptableObjectsProjectile : ScriptableObject
 {
-    public ProjectileType ProjectileTypeEnum;
     public Sprite SpriteProjectile;
+    public ProjectileType ProjectileTypeEnum;
     public float SpeedMoveProjectile;
     public float EffectImpactProjectile;
     public float EffectTime;

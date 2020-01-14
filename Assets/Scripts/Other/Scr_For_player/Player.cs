@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        GetGold(150, "plus");
+        GetGold(Random.Range(50, 70), "plus");
         GetLife(3, "plus");
     }
 
