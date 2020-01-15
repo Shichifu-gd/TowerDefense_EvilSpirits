@@ -8,10 +8,9 @@ public class Enemy : MonoBehaviour
     private Player player;
     private EnemySpawnManager enemySpawnManager;
     private Collider2D EnemyCollider2D;
-    [SerializeField] private Image ImageCurrentHealth;
+    public Image ImageCurrentHealth;
     [SerializeField] private SpriteRenderer ThisSpriteRenderer;
 
-    private int AttackEnemy = 1;
     private int MaxHealthEnemy;
     public int HealthEnemy;
     private int DirectionPointIndex = 0;
@@ -25,6 +24,7 @@ public class Enemy : MonoBehaviour
 
     public bool IsDead { get; set; } = false;
 
+    [HideInInspector]
     public List<GameObject> DirectionPoints;
 
     private void Awake()
@@ -39,6 +39,7 @@ public class Enemy : MonoBehaviour
     {
         enemySpawnManager.RegisterEnemy(gameObject);
         ThisSpriteRenderer.sprite = scrObjEnemy.SpriteEnemy;
+        ThisSpriteRenderer.color = scrObjEnemy.SpriteColor;
         HealthEnemy = scrObjEnemy.HealthEnemy;
         MaxHealthEnemy = HealthEnemy;
         SpeedMove = scrObjEnemy.SpeedMoveEnemy;
@@ -58,7 +59,7 @@ public class Enemy : MonoBehaviour
         if (collision.tag == "Ammunition")
         {
             Projectile projectile = collision.gameObject.GetComponent<Projectile>();
-            ProjectileType projectileType = projectile.GetAmmunitionsTypeEnum;
+            ProjectileType projectileType = projectile.ProjectileTypeEnum;
             if (projectile)
             {
                 if (projectileType == ProjectileType.FireFist)
@@ -67,7 +68,7 @@ public class Enemy : MonoBehaviour
                     DebuffTime = projectile.EffectTime;
                     TakingDebuff();
                 }
-                TakingDamage(projectile.GetAttackProjectile);
+                TakingDamage(projectile.AttackDamage);
                 Destroy(collision.gameObject);
             }
         }
@@ -94,15 +95,11 @@ public class Enemy : MonoBehaviour
     {
         if ((HealthEnemy - damage) > 0)
         {
-            int dam;
-            if (damage < 10) dam = 4;
-            else dam = 6;
-            int minDamage = damage - Random.Range(1, dam);
-            HealthEnemy -= Random.Range(minDamage, damage);
+            HealthEnemy -= damage;
+            float num = HealthEnemy;
+            ImageCurrentHealth.fillAmount = num / MaxHealthEnemy;
         }
         else EnemyIsDead();
-        float num = HealthEnemy;
-        ImageCurrentHealth.fillAmount = num / MaxHealthEnemy;
     }
 
     public void TakingDebuff()

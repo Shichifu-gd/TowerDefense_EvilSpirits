@@ -5,11 +5,11 @@ public class TowerManager : MonoBehaviour
 {
     public Player player;
     private TowerStore towerStore;
-    private SpriteRenderer SpriteSelectedTtower;
+    private SpriteRenderer SpriteSelectedTower;
 
     private void Start()
     {
-        SpriteSelectedTtower = GetComponent<SpriteRenderer>();
+        SpriteSelectedTower = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -20,27 +20,28 @@ public class TowerManager : MonoBehaviour
             RaycastHit2D raycastHit2D = Physics2D.Raycast(mousePoint, Vector2.zero);
             if (towerStore && raycastHit2D.collider.tag == "CellForTower")
             {
-                if (player.Gold >= towerStore.towerPrice)
+                if (player.Gold >= towerStore.TowerPrice)
                 {
                     raycastHit2D.collider.tag = "CellForTowerFull";
-                    PlaceTower(raycastHit2D);
+                    BuildingTower(raycastHit2D);
                 }
                 else DisableDrag();
             }
         }
-        if (SpriteSelectedTtower.enabled) FollowMouse();
+        if (SpriteSelectedTower.enabled) FollowMouse();
         if (Input.GetKeyDown(KeyCode.Escape)) DisableDrag();
     }
 
-    public void PlaceTower(RaycastHit2D raycastHit2D)
+    public void BuildingTower(RaycastHit2D raycastHit2D)
     {
         if (!EventSystem.current.IsPointerOverGameObject() && towerStore != null)
         {
             GameObject newTower = Instantiate(towerStore.CurrentTower);
             newTower.GetComponentInChildren<Tower>().AssignTowerValues(towerStore.ScrObjTower);
             newTower.transform.position = raycastHit2D.transform.position;
+            newTower.GetComponent<UpgradeTower>().CurrentCell = raycastHit2D.collider.gameObject;
             newTower.transform.parent = GameObject.FindGameObjectWithTag("TowerSlot").transform;
-            player.GetGold(towerStore.towerPrice, "minus");
+            player.GetGold(towerStore.TowerPrice, "minus");
             DisableDrag();
         }
     }
@@ -59,13 +60,13 @@ public class TowerManager : MonoBehaviour
 
     public void EnableDrag(Sprite sprite)
     {
-        SpriteSelectedTtower.enabled = true;
-        SpriteSelectedTtower.sprite = sprite;
+        SpriteSelectedTower.enabled = true;
+        SpriteSelectedTower.sprite = sprite;
     }
 
     public void DisableDrag()
     {
-        SpriteSelectedTtower.enabled = false;
+        SpriteSelectedTower.enabled = false;
         towerStore = null;
     }
 }

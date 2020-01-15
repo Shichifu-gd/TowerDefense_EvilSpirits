@@ -8,12 +8,14 @@ public class EnemySpawnManager : MonoBehaviour
     public UIManager uIManager;
     public GameController gameController;
 
-    public float Score;
+    [SerializeField]
+    private float Score;
     private float TimeSpawn;
 
     private int WaveSize;
     private int CurrentNumberEnemies;
     private int NumberSpawn = 0;
+    public int NumberOfDead { get; set; }
 
     private bool SwitchSpawn;
 
@@ -21,13 +23,11 @@ public class EnemySpawnManager : MonoBehaviour
     public GameObject PreEnemy;
 
     public ScriptableObjectsLevelListEnemy[] EnemyLevels;
-    [SerializeField]
     private ScriptableObjectsEnemy[] SelectedUnits;
-
-    private List<float> LevelsDistribution = new List<float>();
 
     [HideInInspector]
     public List<GameObject> EnemyList;
+    private List<float> LevelsDistribution = new List<float>();
 
     private void Start()
     {
@@ -46,15 +46,6 @@ public class EnemySpawnManager : MonoBehaviour
         }
     }
 
-    private void UpdateListLevelsDistribution()
-    {
-        LevelsDistribution.Clear();
-        for (int index = 0; index < EnemyLevels.Length; index++)
-        {
-            LevelsDistribution.Add(EnemyLevels[index].Distribution.Evaluate(Score));
-        }
-    }
-
     public void StartEnemySpawn()
     {
         UpdateListLevelsDistribution();
@@ -65,13 +56,22 @@ public class EnemySpawnManager : MonoBehaviour
         StartCoroutine(EnemySpawn());
     }
 
+    private void UpdateListLevelsDistribution()
+    {
+        LevelsDistribution.Clear();
+        for (int index = 0; index < EnemyLevels.Length; index++)
+        {
+            LevelsDistribution.Add(EnemyLevels[index].Distribution.Evaluate(Score));
+        }
+    }
+
     private void UnitSelection()
     {
         for (int mainIndex = 0; mainIndex < SelectedUnits.Length; mainIndex++)
         {
             float value = Random.Range(0, LevelsDistribution.Sum());
             float sum = 0;
-            if (Score < 300)
+            if (Score < 1000)
             {
                 for (int addIndex = 0; addIndex < LevelsDistribution.Count; addIndex++)
                 {
@@ -91,9 +91,10 @@ public class EnemySpawnManager : MonoBehaviour
     {
         for (int index = 0; index < SelectedUnits.Length; index++)
         {
-            Spawn(SelectedUnits[index]);
-            if (NumberSpawn < 41) TimeSpawn = FindOutSpawnTime();
-            else TimeSpawn = Random.Range(0.5f, 1f);
+            NumberSpawn++;
+            EnemySpawn(SelectedUnits[index]);
+            if (NumberSpawn <= 25) TimeSpawn = FindOutSpawnTime();
+            else TimeSpawn = Random.Range(0.8f, 1.2f);
             yield return new WaitForSeconds(TimeSpawn);
         }
         SelectedUnits = null;
@@ -102,15 +103,13 @@ public class EnemySpawnManager : MonoBehaviour
 
     private float FindOutSpawnTime()
     {
-        if (NumberSpawn <= 10) return Random.Range(1.5f, 4f);
-        if (NumberSpawn > 10 && NumberSpawn <= 15) return Random.Range(1.5f, 3.5f);
-        if (NumberSpawn > 15 && NumberSpawn <= 25) return Random.Range(1f, 2.5f);
-        if (NumberSpawn > 25 && NumberSpawn <= 30) return Random.Range(0.5f, 2f);
-        if (NumberSpawn > 30 && NumberSpawn <= 40) return Random.Range(0.5f, 1.5f);
+        if (NumberSpawn <= 10) return Random.Range(1.5f, 3f);
+        if (NumberSpawn > 10 && NumberSpawn <= 15) return Random.Range(1f, 1.5f);
+        if (NumberSpawn > 15 && NumberSpawn <= 25) return Random.Range(0.8f, 1.2f);
         return 1f;
     }
 
-    private void Spawn(ScriptableObjectsEnemy enemy)
+    private void EnemySpawn(ScriptableObjectsEnemy enemy)
     {
         GameObject enemyObject = Instantiate(PreEnemy, SpawnPointEnemy.transform.position, Quaternion.identity);
         enemyObject.transform.parent = GameObject.FindGameObjectWithTag("EnemySlot").transform;
@@ -128,7 +127,8 @@ public class EnemySpawnManager : MonoBehaviour
         Destroy(enemy.gameObject);
         Score += score;
         CurrentNumberEnemies--;
-        uIManager.AssignValuesEnemyCountText(CurrentNumberEnemies.ToString(), WaveSize.ToString());
+        NumberOfDead++;
+        if (CurrentNumberEnemies >= 0) uIManager.AssignValuesEnemyCountText(CurrentNumberEnemies.ToString(), WaveSize.ToString());
         CheckForRemainingEnemies();
         Finish();
     }
@@ -143,8 +143,9 @@ public class EnemySpawnManager : MonoBehaviour
         if (CurrentNumberEnemies <= 0)
         {
             uIManager.SwitchPanelNextWave(true);
-            // NextWave();
-            // gameController.EndWave();
+            /*|-> for endless flow (delete)
+            NextWave();
+            gameController.EndWave(); <-|*/
         }
     }
 

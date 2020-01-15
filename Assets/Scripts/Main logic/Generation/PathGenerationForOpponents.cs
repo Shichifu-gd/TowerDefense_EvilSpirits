@@ -14,16 +14,16 @@ public class PathGenerationForOpponents : MonoBehaviour
     private GameObject DirectionOfVerificationSouth;
     private GameObject DirectionOfVerificationEast;
 
-    private bool WorkflowSwitching = true;
-    private bool CompleteShutdown;
-    private bool FirstCell;
-
     private int YPosition = 0;
     private int NumberOfCellsTraversedEast;
     public int NumberForMaximumRandomNumber = 10;
 
     private string CurrentForbiddenDirection;
     private string OldForbiddenDirection = "none";
+
+    private bool WorkflowSwitching = true;
+    private bool CompleteShutdown;
+    private bool FirstCell;
 
     private void Awake()
     {
@@ -88,7 +88,6 @@ public class PathGenerationForOpponents : MonoBehaviour
             }
             if (randomNumber == 2)
             {
-
                 vector = directions.East.transform.position;
                 CurrentForbiddenDirection = "east";
                 NumberOfCellsTraversedEast++;
@@ -133,6 +132,7 @@ public class PathGenerationForOpponents : MonoBehaviour
         ChangeCell(directions.CurrentCell, null, "finish");
         VectorDeterminant.SetActive(false);
         cellManager.ChangeCellTag("tower", "CellForTower");
+        cellManager.ArrangingDecor();
         enemySpawnManager.StartEnemySpawn();
         uIManager.OnPanel();
     }
@@ -150,7 +150,7 @@ public class PathGenerationForOpponents : MonoBehaviour
         DirectionOfVerificationEast = directions.East.GetComponent<GettingCellReference>().CellPosition;
     }
 
-    private void AddTerritoryForTowers() //check!!
+    private void AddTerritoryForTowers()
     {
         if (DirectionOfVerificationNorth.GetComponent<CellInformation>().VarietyCell == "standart" && DetermineWhetherPossibleChangeTypeCell()) ChangeCell(DirectionOfVerificationNorth, components.ZoneForTower, "tower");
         else if (DirectionOfVerificationNorth.GetComponent<CellInformation>().VarietyCell == "standart") ChangeCell(DirectionOfVerificationNorth, null, "none");

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Tower : MonoBehaviour
@@ -11,9 +11,21 @@ public class Tower : MonoBehaviour
     private GameObject PreProjectile;
     public GameObject AdditionalInterface;
 
+    public int CurrentLevelTower { get; set; }
+    public int MaxLevelTower { get; set; }
+    public int PriceForUpgrade { get; set; }
+
+    // |--> for test
+    public int DamageBonusPerLevel { get; set; }
+    public float AttackRangeBonusPerLevel { get; set; }
+    public float BasicDelayAttackBonusPerLevel { get; set; }
+    // --<-|
+
     private float BasicDelayAttack;
     private float CurrentDelayAttack;
     private float AttackRange;
+
+    private bool SwitchButton;
 
     public void Awake()
     {
@@ -23,6 +35,9 @@ public class Tower : MonoBehaviour
 
     public void AssignTowerValues(ScriptableObjectsTower scrObjTower)
     {
+        CurrentLevelTower = 1;
+        MaxLevelTower = scrObjTower.MaxLevel;
+        PriceForUpgrade = scrObjTower.PriceForUpgradeTower;
         ThisSpriteRenderer.sprite = scrObjTower.SpriteTower;
         AttackRange = scrObjTower.AttackRangeTower;
         BasicDelayAttack = scrObjTower.BasicDelayAttackTower;
@@ -30,10 +45,21 @@ public class Tower : MonoBehaviour
         ScrObjProjectile = scrObjTower.ScrObjProjectile;
     }
 
+    public void UpLevelTower()
+    {
+        DamageBonusPerLevel = ScrObjProjectile.AttackDamageProjectile / 2;
+        AttackRangeBonusPerLevel = AttackRange / 3;
+        BasicDelayAttackBonusPerLevel = BasicDelayAttack / 3;
+        AttackRange += AttackRangeBonusPerLevel;
+        BasicDelayAttack += BasicDelayAttackBonusPerLevel;
+    }
+
     private void Update()
     {
         if (CanAttack()) GetTarget();
         if (CurrentDelayAttack > 0) CurrentDelayAttack -= Time.deltaTime;
+        if (Input.GetMouseButtonDown(0)) AdditionalInterface.SetActive(true);
+        if (SwitchButton == false) AdditionalInterface.SetActive(false);
     }
 
     private bool CanAttack()
@@ -58,33 +84,27 @@ public class Tower : MonoBehaviour
         if (target != null) AttackTower(target);
     }
 
-    /* (delete !!)
-    private List<GameObject> GetEnemiesRange()
-    {
-        List<GameObject> enemyRange = new List<GameObject>();
-        foreach (GameObject enemy in enemySpawnManager.EnemyList)
-        {
-            if (Vector2.Distance(transform.localPosition, enemy.transform.localPosition) <= AttackRange) enemyRange.Add(enemy);
-        }
-        return enemyRange;
-    }
-    */
-
     private void AttackTower(Transform thisEnemy)
     {
         CurrentDelayAttack = BasicDelayAttack;
         GameObject newProjectile = Instantiate(PreProjectile, gameObject.transform.position, Quaternion.identity);
         newProjectile.transform.parent = GameObject.FindGameObjectWithTag("ProjectileSlot").transform;
-        newProjectile.GetComponent<Projectile>().AssignValues(thisEnemy, ScrObjProjectile);
+        newProjectile.GetComponent<Projectile>().AssignValues(thisEnemy, ScrObjProjectile, DamageBonusPerLevel);
     }
 
     private void OnMouseEnter()
     {
-        //  AdditionalInterface.SetActive(true); 
+        StartCoroutine(Expectation());
     }
 
     private void OnMouseExit()
     {
-        //  AdditionalInterface.SetActive(false);
+        StartCoroutine(Expectation());
+    }
+
+    private IEnumerator Expectation()
+    {
+        yield return new WaitForSeconds(.1f);
+        SwitchButton = !SwitchButton;
     }
 }

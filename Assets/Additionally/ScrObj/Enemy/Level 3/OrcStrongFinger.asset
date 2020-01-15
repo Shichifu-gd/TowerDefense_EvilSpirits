@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: OrcStrongFinger
   m_EditorClassIdentifier: 
   SpriteEnemy: {fileID: 21300000, guid: 1667cc93f5e511a42b4b87404afeedd2, type: 3}
+  SpriteColor: {r: 1, g: 1, b: 1, a: 1}
   SpeedMoveEnemy: 0.6
   HealthEnemy: 73
   MinReward: 15
-  MaxReward: 30
-  MinScore: 3
-  MaxScore: 5
+  MaxReward: 25
+  MinScore: 10
+  MaxScore: 14

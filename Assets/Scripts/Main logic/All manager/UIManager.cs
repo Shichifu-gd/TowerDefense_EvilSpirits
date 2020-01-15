@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     public Text GoldText;
     public Text LifeText;
     public Text EnemyCountText;
+    public Text EnemyCountDeadText;
 
     public GameObject PanelMain;
     public GameObject PanelRestart;
@@ -55,5 +56,10 @@ public class UIManager : MonoBehaviour
     public void SwitchPanelRestart()
     {
         PanelRestart.SetActive(true);
+    }
+
+    public void EnemyCountDead(string current)
+    {
+        EnemyCountDeadText.text = $"Count dead: {current}";
     }
 }

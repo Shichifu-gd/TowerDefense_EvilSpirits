@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79371532dcb78d44f86f333afa0c1123, type: 3}
+  m_Name: ListEnemyLevel 1.5
+  m_EditorClassIdentifier: 
+  LevelEnemyUnit: Level 1.5
+  Distribution:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 150
+      value: 0
+      inSlope: 0.0025
+      outSlope: 0.0025
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 350
+      value: 0.5
+      inSlope: 0.0025
+      outSlope: 0.0025
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  EnemyList:
+  - {fileID: 11400000, guid: 78033973254054141b70bb7dc87c6f2e, type: 2}
+  - {fileID: 11400000, guid: 1cb98ff76a06165429280d602e8447ad, type: 2}
+  - {fileID: 11400000, guid: ef0962257fbdd0945a3b44f0c5543f58, type: 2}

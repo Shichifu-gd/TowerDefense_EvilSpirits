@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd8345f2cd75e5488ce2078988c66f1, type: 3}
   m_Name: Iron
   m_EditorClassIdentifier: 
-  ProjectileTypeEnum: 2
   SpriteProjectile: {fileID: 21300000, guid: 96004f7896f31144497d29d9198338e7, type: 3}
-  SpeedMoveProjectile: 4
+  ProjectileTypeEnum: 2
+  SpeedMoveProjectile: 5.5
   EffectImpactProjectile: 0
   EffectTime: 0
-  AttackDamageProjectile: 10
+  AttackDamageProjectile: 6

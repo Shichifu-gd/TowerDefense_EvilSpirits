@@ -4,6 +4,7 @@
 public class ScriptableObjectsEnemy : ScriptableObject
 {
     public Sprite SpriteEnemy;
+    public Color SpriteColor;
     public float SpeedMoveEnemy;
     public int HealthEnemy;
     public int MinReward;

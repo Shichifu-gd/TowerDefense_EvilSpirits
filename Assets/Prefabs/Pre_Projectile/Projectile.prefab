@@ -48,7 +48,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.06
+  m_Radius: 0.04
 --- !u!114 &4290988425582806136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,11 +62,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpriteRendererProjectile: {fileID: 3564557660946007846}
-  Target: {fileID: 0}
-  AttackDamage: 0
-  ProjectileSpeed: 0
-  EffectImpactProjectile: 0
-  EffectTime: 0
 --- !u!1 &8026955129583022676
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +131,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 7
-  m_Sprite: {fileID: 21300000, guid: 96004f7896f31144497d29d9198338e7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bfd2dc03b6492be40b6fe96887d4f103, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

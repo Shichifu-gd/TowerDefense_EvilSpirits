@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd8345f2cd75e5488ce2078988c66f1, type: 3}
   m_Name: Fire
   m_EditorClassIdentifier: 
-  ProjectileTypeEnum: 0
   SpriteProjectile: {fileID: 21300000, guid: 2100983a8e2ec2c4ba45a6a64d0356e8, type: 3}
-  SpeedMoveProjectile: 4
+  ProjectileTypeEnum: 0
+  SpeedMoveProjectile: 5
   EffectImpactProjectile: 0.5
   EffectTime: 1
-  AttackDamageProjectile: 5
+  AttackDamageProjectile: 3

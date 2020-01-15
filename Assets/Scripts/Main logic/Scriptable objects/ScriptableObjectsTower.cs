@@ -8,4 +8,6 @@ public class ScriptableObjectsTower : ScriptableObject
     public float BasicDelayAttackTower;
     public float AttackRangeTower;
     public int PriceTower;
+    public int MaxLevel;
+    public int PriceForUpgradeTower;
 }

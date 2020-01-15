@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: OrcIronHelmet
   m_EditorClassIdentifier: 
   SpriteEnemy: {fileID: 21300000, guid: 2f672098ae8126d40b53426b9b798d32, type: 3}
+  SpriteColor: {r: 1, g: 1, b: 1, a: 1}
   SpeedMoveEnemy: 1.1
   HealthEnemy: 30
   MinReward: 5
-  MaxReward: 15
-  MinScore: 2
-  MaxScore: 4
+  MaxReward: 10
+  MinScore: 8
+  MaxScore: 12

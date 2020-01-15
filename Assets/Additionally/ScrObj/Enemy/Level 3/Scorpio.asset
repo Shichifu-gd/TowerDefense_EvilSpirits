@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Scorpio
   m_EditorClassIdentifier: 
   SpriteEnemy: {fileID: 21300000, guid: b1956101d46b6654aa708ecb37824ce2, type: 3}
+  SpriteColor: {r: 1, g: 1, b: 1, a: 1}
   SpeedMoveEnemy: 1.1
   HealthEnemy: 60
   MinReward: 15
-  MaxReward: 30
-  MinScore: 3
-  MaxScore: 5
+  MaxReward: 25
+  MinScore: 10
+  MaxScore: 14

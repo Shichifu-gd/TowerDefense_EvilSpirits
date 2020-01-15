@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Ghost
   m_EditorClassIdentifier: 
   SpriteEnemy: {fileID: 21300000, guid: 093c22e80f5f067428bb3ffff24f8426, type: 3}
+  SpriteColor: {r: 1, g: 1, b: 1, a: 1}
   SpeedMoveEnemy: 0.5
   HealthEnemy: 33
   MinReward: 2
-  MaxReward: 10
-  MinScore: 1
-  MaxScore: 3
+  MaxReward: 5
+  MinScore: 6
+  MaxScore: 10

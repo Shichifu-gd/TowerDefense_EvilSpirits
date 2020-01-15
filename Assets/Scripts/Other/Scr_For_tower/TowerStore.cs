@@ -4,22 +4,22 @@ using UnityEngine;
 public class TowerStore : MonoBehaviour
 {
     public ScriptableObjectsTower ScrObjTower;
-    public Image IcoTower;
-    public GameObject PreTower;
     [HideInInspector]
     public Sprite SprTower;
-    public int towerPrice { get; set; }
-
+    public Image IcoTower;
+    public GameObject PreTower;
     public Text DamageText;
     public Text PriceText;
+
+    public int TowerPrice { get; set; }
 
     private void Start()
     {
         SprTower = ScrObjTower.SpriteTower;
         IcoTower.sprite = ScrObjTower.SpriteTower;
-        towerPrice = ScrObjTower.PriceTower;
+        TowerPrice = ScrObjTower.PriceTower;
         DamageText.text = ScrObjTower.ScrObjProjectile.AttackDamageProjectile.ToString();
-        PriceText.text = towerPrice.ToString();
+        PriceText.text = TowerPrice.ToString();
     }
 
     public GameObject CurrentTower

@@ -17,3 +17,5 @@ MonoBehaviour:
   BasicDelayAttackTower: 1
   AttackRangeTower: 4
   PriceTower: 10
+  MaxLevel: 3
+  PriceForUpgradeTower: 14

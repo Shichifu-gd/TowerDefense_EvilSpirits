@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpriteProjectile: {fileID: 21300000, guid: ff1a63e25a4bcbd49ad33964250fb81f, type: 3}
   ProjectileTypeEnum: 1
-  SpeedMoveProjectile: 4
+  SpeedMoveProjectile: 6
   EffectImpactProjectile: 0
   EffectTime: 0
-  AttackDamageProjectile: 6
+  AttackDamageProjectile: 4

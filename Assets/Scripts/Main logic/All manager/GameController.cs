@@ -22,8 +22,9 @@ public class GameController : MonoBehaviour
     {
         if (player.Life <= 0)
         {
-            uIManager.SwitchPanelRestart();
             enemySpawnManager.AllStop();
+            uIManager.SwitchPanelRestart();
+            uIManager.EnemyCountDead(enemySpawnManager.NumberOfDead.ToString());
         }
     }
 

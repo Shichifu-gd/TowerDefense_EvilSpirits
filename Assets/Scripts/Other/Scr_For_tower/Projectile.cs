@@ -8,11 +8,11 @@ public class Projectile : MonoBehaviour
 
     private Transform Target;
 
-    public int AttackDamage;
+    public int AttackDamage { get; set; }
 
-    public float ProjectileSpeed;
-    public float EffectImpactProjectile;
-    public float EffectTime;
+    public float ProjectileSpeed { get; set; }
+    public float EffectImpactProjectile { get; set; }
+    public float EffectTime { get; set; }
 
     public bool StartMove { get; set; }
 
@@ -21,12 +21,12 @@ public class Projectile : MonoBehaviour
         if (StartMove == true) MoveProjectile();
     }
 
-    public void AssignValues(Transform enemy, ScriptableObjectsProjectile scrObjProjectile)
+    public void AssignValues(Transform enemy, ScriptableObjectsProjectile scrObjProjectile, int damageBonus)
     {
         ProjectileTypeEnum = scrObjProjectile.ProjectileTypeEnum;
         ProjectileSpeed = scrObjProjectile.SpeedMoveProjectile;
         SpriteRendererProjectile.sprite = scrObjProjectile.SpriteProjectile;
-        AttackDamage = scrObjProjectile.AttackDamageProjectile;
+        AttackDamage = scrObjProjectile.AttackDamageProjectile + damageBonus;
         EffectImpactProjectile = scrObjProjectile.EffectImpactProjectile;
         EffectTime = scrObjProjectile.EffectTime;
         Target = enemy;
@@ -45,37 +45,5 @@ public class Projectile : MonoBehaviour
             }
         }
         else Destroy(gameObject);
-    }
-
-    public int GetAttackProjectile
-    {
-        get
-        {
-            return AttackDamage;
-        }
-    }
-
-    public float GetEffectProjectile
-    {
-        get
-        {
-            return EffectImpactProjectile;
-        }
-    }
-
-    public float GetEffectTimeProjectile
-    {
-        get
-        {
-            return EffectTime;
-        }
-    }
-
-    public ProjectileType GetAmmunitionsTypeEnum
-    {
-        get
-        {
-            return ProjectileTypeEnum;
-        }
     }
 }
