@@ -9041,10 +9041,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScrObjTower: {fileID: 11400000, guid: 719098c93dc52db4fa60890f3eed58c2, type: 2}
+  SprTower: {fileID: 0}
   IcoTower: {fileID: 501006598}
   PreTower: {fileID: 2539657185808589787, guid: 6015780f9f3bc6f46ad77f61d07a4aec,
     type: 3}
-  SprTower: {fileID: 0}
   DamageText: {fileID: 2100091176}
   PriceText: {fileID: 1379373634}
 --- !u!1001 &709026829
@@ -13593,7 +13593,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3866790862cf644439151bfe9c30bb4e, type: 2}
   - {fileID: 11400000, guid: d32f2a31e0deef149a79f97558d9da81, type: 2}
   - {fileID: 11400000, guid: 4809bcece5a6ce743a8eabe64f51dffc, type: 2}
-  SelectedUnits: []
   EnemyList: []
 --- !u!4 &1083893724 stripped
 Transform:
@@ -17994,10 +17993,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScrObjTower: {fileID: 11400000, guid: 04ac0d791ba8f104bbbb90b8a243bea6, type: 2}
+  SprTower: {fileID: 0}
   IcoTower: {fileID: 1471874717}
   PreTower: {fileID: 2539657185808589787, guid: 6015780f9f3bc6f46ad77f61d07a4aec,
     type: 3}
-  SprTower: {fileID: 0}
   DamageText: {fileID: 1746110697}
   PriceText: {fileID: 318024739}
 --- !u!1 &1379373632
